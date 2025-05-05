@@ -1,0 +1,192 @@
+{% extends "layout.html" %}
+
+{% block title %}Review Content - Content Moderation{% endblock %}
+
+{% block content %}
+<div class="container py-3">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="/admin/flagged">Flagged Content</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Review Content #{{ content.id }}</li>
+        </ol>
+    </nav>
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-eye me-2"></i> Content Review</h1>
+        <div class="d-flex gap-2">
+            <form id="status-form" action="/admin/update_status/{{ content.id }}" method="post">
+                <input type="hidden" name="status" id="status-input" value="">
+                <input type="hidden" name="redirect_to" value="review">
+                <textarea id="notes-text" name="notes" class="d-none"></textarea>
+                
+                <button type="button" id="reject-btn" class="btn btn-danger">
+                    <i class="fas fa-times me-1"></i> Reject
+                </button>
+                <button type="button" id="approve-btn" class="btn btn-success">
+                    <i class="fas fa-check me-1"></i> Approve
+                </button>
+                <button type="button" id="notes-toggle" class="btn btn-outline-secondary">
+                    <i class="fas fa-sticky-note me-1"></i> Add Notes
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="notes-container" class="card mb-4 d-none">
+        <div class="card-body">
+            <h5 class="card-title">Moderation Notes</h5>
+            <textarea id="notes-text" name="notes" class="form-control mb-2" rows="3" placeholder="Add your notes about this moderation decision..."></textarea>
+            <div class="text-end">
+                <button id="notes-toggle-close" class="btn btn-sm btn-secondary">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Content Display -->
+        <div class="col-md-8 mb-4">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-file-alt me-2"></i> Content</h5>
+                    <small class="text-muted">Created: {{ content.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Content Type:</strong> {{ content.content_type }}
+                        {% if content.user_id %}
+                        <span class="ms-3"><strong>User ID:</strong> {{ content.user_id }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="border rounded p-3 bg-body-tertiary">
+                        <pre id="content-text" class="mb-0" style="white-space: pre-wrap;">{{ content.content_text }}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Moderation Info -->
+        <div class="col-md-4 mb-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i> Moderation Status</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Status:</strong> 
+                        <span class="badge {% if status.status == 'flagged' %}bg-warning{% elif status.status == 'approved' %}bg-success{% elif status.status == 'rejected' %}bg-danger{% endif %}">
+                            {{ status.status|capitalize }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Moderation Score:</strong> {{ "%.4f"|format(status.moderation_score) }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Processing Time:</strong> {{ "%.2f"|format(status.processing_time) }} seconds
+                    </div>
+                    <div>
+                        <strong>Last Updated:</strong> {{ status.last_updated.strftime('%Y-%m-%d %H:%M') }}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i> Flag Details</h5>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        {% for flag in flags %}
+                        <li class="list-group-item">
+                            <div class="flag-explanation-header" style="cursor: pointer;">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="badge {% if flag.flag_score > 0.7 %}bg-danger{% elif flag.flag_score > 0.4 %}bg-warning{% else %}bg-info{% endif %} me-2">
+                                            {{ "%.2f"|format(flag.flag_score) }}
+                                        </span>
+                                        <strong>{{ flag.flag_type|replace('_', ' ')|title }}</strong>
+                                    </div>
+                                    <i class="fas fa-chevron-down accordion-icon"></i>
+                                </div>
+                            </div>
+                            <div class="flag-explanation-content">
+                                <div class="pt-3">
+                                    <small class="text-muted">Terms contributing to this flag:</small>
+                                    <ul class="mt-2 small">
+                                        {% for term in flag.flag_details.explanation %}
+                                        <li class="mb-1">
+                                            <strong>"{{ term.term }}"</strong> - 
+                                            <span class="{% if term.coefficient > 0 %}text-danger{% else %}text-success{% endif %}">
+                                                {{ "%.4f"|format(term.coefficient) }}
+                                            </span>
+                                        </li>
+                                        {% else %}
+                                        <li>No specific terms identified</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        {% else %}
+                        <li class="list-group-item">No flags detected</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Moderation History -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-history me-2"></i> Moderation History</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Action</th>
+                            <th>By</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for action in actions %}
+                        <tr>
+                            <td>{{ action.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>
+                                <span class="badge {% if 'approved' in action.action_type %}bg-success{% elif 'rejected' in action.action_type %}bg-danger{% elif 'flagged' in action.action_type %}bg-warning{% else %}bg-info{% endif %}">
+                                    {{ action.action_type|replace('_', ' ')|title }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if action.user_id %}
+                                Admin #{{ action.user_id }}
+                                {% else %}
+                                <i>Automated System</i>
+                                {% endif %}
+                            </td>
+                            <td>{{ action.action_notes }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center py-3">No moderation history</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hidden element for JavaScript access -->
+    <div id="flag-explanations" data-explanations="{{ flags|map(attribute='flag_details.explanation')|list|tojson }}" style="display:none;"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/review.js"></script>
+{% endblock %}
+

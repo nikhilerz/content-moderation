@@ -1,0 +1,101 @@
+{% extends "layout.html" %}
+
+{% block title %}Content Moderation System - Home{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="text-center mb-5">
+                <h1 class="display-4 mb-3">Content Moderation</h1>
+                <p class="lead">Automatically detect and filter harmful content using advanced machine learning.</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 bg-dark">
+                        <div class="card-body">
+                            <h3 class="card-title"><i class="fas fa-upload me-2 text-primary"></i>Upload Content</h3>
+                            <p class="card-text">Use our drag-and-drop interface to instantly check if your content contains harmful elements. Supports text files and direct input.</p>
+                            <div class="d-grid gap-2">
+                                <a href="{{ url_for('upload') }}" class="btn btn-primary">Check Content Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 bg-dark">
+                        <div class="card-body">
+                            <h3 class="card-title"><i class="fas fa-user-shield me-2 text-primary"></i>Admin Tools</h3>
+                            <p class="card-text">Access comprehensive moderation dashboards, review flagged content, and configure system settings.</p>
+                            <div class="d-grid gap-2">
+                                <a href="{{ url_for('admin.dashboard') }}" class="btn btn-primary">Admin Dashboard</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-5">
+                <h2 class="text-center mb-4">How It Works</h2>
+                <div class="row text-center">
+                    <div class="col-md-4 mb-4">
+                        <div class="p-3">
+                            <div class="fs-1 text-primary mb-3">
+                                <i class="fas fa-file-upload"></i>
+                            </div>
+                            <h4>Upload Content</h4>
+                            <p>Drag and drop your text files or paste content directly into our interface.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="p-3">
+                            <div class="fs-1 text-primary mb-3">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h4>AI Analysis</h4>
+                            <p>Our machine learning algorithms analyze the content for potentially harmful elements.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="p-3">
+                            <div class="fs-1 text-primary mb-3">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <h4>Detailed Results</h4>
+                            <p>View comprehensive reports with detailed flagging categories and confidence scores.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-5">
+                <div class="col-md-8 offset-md-2">
+                    <div class="card bg-dark">
+                        <div class="card-body">
+                            <h3 class="text-center mb-4">Why Choose Our Content Moderation System?</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul class="list-unstyled">
+                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Advanced ML algorithms</li>
+                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Multiple detection categories</li>
+                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Intuitive user interface</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="list-unstyled">
+                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>High accuracy detection</li>
+                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Comprehensive admin tools</li>
+                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Fast, responsive analysis</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

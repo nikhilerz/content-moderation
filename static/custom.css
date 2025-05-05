@@ -1,0 +1,206 @@
+/* Custom CSS for Content Moderation System */
+
+/* Drag and Drop styles */
+.border-dashed {
+    border-style: dashed !important;
+    border-width: 2px !important;
+    transition: all 0.3s ease;
+}
+
+#dropZone {
+    transition: all 0.3s;
+}
+
+#dropZone:hover {
+    background-color: rgba(13, 110, 253, 0.1) !important;
+    border-color: var(--bs-primary) !important;
+    cursor: pointer;
+}
+
+/* Global styles */
+:root {
+    --highlight-color: #0d6efd; /* Bootstrap primary color */
+}
+
+/* Make sure the body fills the full viewport height */
+html, body {
+    min-height: 100vh;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Custom styles for the dashboard cards */
+.stat-card {
+    border-radius: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Flag highlighting in content text */
+.highlight-profanity {
+    background-color: rgba(220, 53, 69, 0.2);
+    padding: 0 2px;
+    border-radius: 3px;
+}
+
+.highlight-hate-speech {
+    background-color: rgba(255, 193, 7, 0.2);
+    padding: 0 2px;
+    border-radius: 3px;
+}
+
+.highlight-violence {
+    background-color: rgba(253, 126, 20, 0.2);
+    padding: 0 2px;
+    border-radius: 3px;
+}
+
+.highlight-sexual-content {
+    background-color: rgba(13, 110, 253, 0.2);
+    padding: 0 2px;
+    border-radius: 3px;
+}
+
+.highlight-harassment {
+    background-color: rgba(111, 66, 193, 0.2);
+    padding: 0 2px;
+    border-radius: 3px;
+}
+
+/* Content review page */
+.content-review-panel {
+    border-radius: 10px;
+    border: 1px solid var(--bs-border-color);
+    background-color: var(--bs-dark);
+}
+
+.flag-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.flag-item {
+    border-left: 4px solid transparent;
+    padding-left: 10px;
+}
+
+.flag-item.high {
+    border-left-color: var(--bs-danger);
+}
+
+.flag-item.medium {
+    border-left-color: var(--bs-warning);
+}
+
+.flag-item.low {
+    border-left-color: var(--bs-info);
+}
+
+/* Settings page */
+.settings-form label {
+    font-weight: 500;
+}
+
+.settings-card {
+    border-radius: 10px;
+    transition: transform 0.2s;
+}
+
+.settings-card:hover {
+    transform: translateY(-3px);
+}
+
+/* Timeline for actions */
+.timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 0;
+    height: 100%;
+    width: 2px;
+    background-color: var(--bs-border-color);
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 20px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -30px;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--bs-primary);
+}
+
+/* Pagination customization */
+.pagination .page-link {
+    border-radius: 4px;
+    margin: 0 2px;
+}
+
+/* Custom button styles */
+.btn-approve {
+    background-color: #198754;
+    border-color: #198754;
+    color: white;
+}
+
+.btn-approve:hover {
+    background-color: #157347;
+    border-color: #146c43;
+    color: white;
+}
+
+.btn-reject {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+.btn-reject:hover {
+    background-color: #bb2d3b;
+    border-color: #b02a37;
+    color: white;
+}
+
+/* Loading spinner */
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #FFF;
+    border-bottom-color: var(--highlight-color);
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
